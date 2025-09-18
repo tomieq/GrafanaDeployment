@@ -1,9 +1,11 @@
 version: "3"
+name: grafana-stack
 networks:
   grafana-network:
 services:
   loki:
     image: grafana/loki:3.5.5
+    container_name: loki
     command: -config.file=/etc/loki/local-config.yml
     restart: unless-stopped
     volumes:
@@ -12,14 +14,19 @@ services:
       - grafana-network
   grafana:
     image: grafana/grafana:11.5
-    restart: unless-stopped
+    container_name: grafana
     user: $UID
     volumes:
       - ${PWD}/volume-grafana:/var/lib/grafana
+      - ${PWD}/grafana-config/grafana-provisioning.yml:/etc/grafana/provisioning/datasources/grafana-provisioning.yml
     networks:
       - grafana-network
+    depends_on:
+      loki:
+        condition: service_started
   treaefik:
     image: traefik:v3.5.2
+    container_name: traefik
     volumes:
       - ${PWD}/traefik-config/traefik.yml:/etc/traefik/traefik.yml
       - ${PWD}/traefik-config/traefik-routing.yml:/traefik-routing.yml
@@ -28,7 +35,5 @@ services:
     ports:
       - "7070:7070"
     depends_on:
-      loki:
-        condition: service_started
       grafana:
         condition: service_started
