@@ -1,0 +1,28 @@
+version: "3"
+networks:
+  grafana-network:
+services:
+  loki:
+    image: grafana/loki:3.5.5
+    command: -config.file=/etc/loki/local-config.yml
+    restart: unless-stopped
+    volumes:
+      - ${PWD}/volume-loki:/etc/loki
+    ports:
+      - "3100:3100"
+    networks:
+      - grafana-network
+  grafana:
+    image: grafana/grafana:11.5
+    restart: unless-stopped
+    user: $UID
+    volumes:
+      - ${PWD}/volume-grafana:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - grafana-network
+  treaefik:
+    image: traefik:v3.5.2
+    networks:
+      - grafana-network
