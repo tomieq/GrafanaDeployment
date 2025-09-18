@@ -7,7 +7,7 @@ services:
     command: -config.file=/etc/loki/local-config.yml
     restart: unless-stopped
     volumes:
-      - ${PWD}/volume-loki:/etc/loki
+      - ${PWD}/loki-config:/etc/loki
     networks:
       - grafana-network
   grafana:
@@ -21,8 +21,8 @@ services:
   treaefik:
     image: traefik:v3.5.2
     volumes:
-      - ${PWD}/volume-traefik/traefik.yml:/etc/traefik/traefik.yml
-      - ${PWD}/volume-traefik/traefik-routing.yml:/traefik-routing.yml
+      - ${PWD}/traefik-config/traefik.yml:/etc/traefik/traefik.yml
+      - ${PWD}/traefik-config/traefik-routing.yml:/traefik-routing.yml
     networks:
       - grafana-network
     ports:
