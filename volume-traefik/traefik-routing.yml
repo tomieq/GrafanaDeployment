@@ -1,0 +1,27 @@
+http:
+  routers:
+    loki:
+      entryPoints:
+        - web
+      rule: Path(`/loki/api/v1/push`) && Method(`POST`)
+      service: loki
+      priority: 100
+    grafana:
+      entryPoints:
+        - web
+      rule: PathPrefix(`/`)
+      service: grafana
+      priority: 1
+    
+  # Add the service
+  services:
+    loki:
+      loadBalancer:
+        servers:
+        - url: http://loki:3100/
+        passHostHeader: true
+    grafana:
+      loadBalancer:
+        servers:
+        - url: http://grafana:3000/
+        passHostHeader: true

@@ -1,0 +1,7 @@
+providers:
+  file:
+    filename: "/traefik-routing.yml"
+    watch: true
+entryPoints:
+  web:
+    address: ":7070"

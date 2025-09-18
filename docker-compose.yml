@@ -8,8 +8,6 @@ services:
     restart: unless-stopped
     volumes:
       - ${PWD}/volume-loki:/etc/loki
-    ports:
-      - "3100:3100"
     networks:
       - grafana-network
   grafana:
@@ -18,11 +16,19 @@ services:
     user: $UID
     volumes:
       - ${PWD}/volume-grafana:/var/lib/grafana
-    ports:
-      - "3000:3000"
     networks:
       - grafana-network
   treaefik:
     image: traefik:v3.5.2
+    volumes:
+      - ${PWD}/volume-traefik/traefik.yml:/etc/traefik/traefik.yml
+      - ${PWD}/volume-traefik/traefik-routing.yml:/traefik-routing.yml
     networks:
       - grafana-network
+    ports:
+      - "7070:7070"
+    depends_on:
+      loki:
+        condition: service_started
+      grafana:
+        condition: service_started
