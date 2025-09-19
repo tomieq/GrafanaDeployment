@@ -8,7 +8,8 @@ services:
     command: -config.file=/etc/loki/local-config.yml
     restart: unless-stopped
     volumes:
-      - ${PWD}/loki-config:/etc/loki
+      - ${PWD}/loki-config/local-config.yml:/etc/loki/local-config.yml:ro
+      - ${PWD}/volume-loki:/loki:rw
     networks:
       - grafana-network
   grafana:
