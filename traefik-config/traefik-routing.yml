@@ -9,11 +9,12 @@ http:
     grafana:
       entryPoints:
         - web
+      middlewares:
+        - grafana-auth
       rule: PathPrefix(`/`)
       service: grafana
       priority: 1
-    
-  # Add the service
+
   services:
     loki:
       loadBalancer:
@@ -25,3 +26,9 @@ http:
         servers:
         - url: http://grafana:3000/
         passHostHeader: true
+  middlewares:
+    grafana-auth:
+      digestAuth:
+        usersFile: /digestUsers.txt
+        realm: grafana
+        removeHeader: true
