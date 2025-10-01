@@ -7,6 +7,7 @@ services:
     container_name: loki
     command: -config.file=/etc/loki/local-config.yml
     restart: unless-stopped
+    user: "${UID}"
     volumes:
       - ${PWD}/loki-config/local-config.yml:/etc/loki/local-config.yml:ro
       - ${PWD}/volume-loki:/loki:rw
@@ -15,10 +16,10 @@ services:
   grafana:
     image: grafana/grafana:11.5
     container_name: grafana
-    user: $UID
+    user: "${UID}"
     volumes:
-      - ${PWD}/volume-grafana:/var/lib/grafana
-      - ${PWD}/grafana-config/grafana-provisioning.yml:/etc/grafana/provisioning/datasources/grafana-provisioning.yml
+      - ${PWD}/volume-grafana:/var/lib/grafana:rw
+      - ${PWD}/grafana-config/grafana-provisioning.yml:/etc/grafana/provisioning/datasources/grafana-provisioning.yml:ro
     networks:
       - grafana-network
     depends_on:

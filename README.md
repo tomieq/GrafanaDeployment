@@ -21,6 +21,12 @@ pass: admin
 - Loki listens on port 3100
 - Traefik wraps them on port 7070
 
+# Grafana uid
+Sometimes docker-compose will raise a warning about unknown `UID`.
+```
+export UID
+```
+
 # Grafana digest authentication
 Grafana UI is protected with digest authentication. Users are sored in `traefik-config/digestUsers.txt` file. 
 The format is:
