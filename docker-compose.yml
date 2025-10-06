@@ -1,6 +1,7 @@
 version: "3"
 networks:
   grafana-network:
+    name: grafana-net
 services:
   loki:
     image: grafana/loki:3.5.5
@@ -13,17 +14,29 @@ services:
       - ${PWD}/volume-loki:/loki:rw
     networks:
       - grafana-network
+  prometheus:
+    image: prom/prometheus:v3.6.0
+    container_name: prometheus
+    user: "${UID}"
+    command: --config.file=/prometheus-config.yml
+    volumes:
+      - ${PWD}/prometheus-config/prometheus.yml:/prometheus-config.yml:ro
+      - ${PWD}/volume-prometheus:/prometheus:rw
+    networks:
+      - grafana-network
   grafana:
     image: grafana/grafana:11.5
     container_name: grafana
     user: "${UID}"
     volumes:
-      - ${PWD}/volume-grafana:/var/lib/grafana:rw
       - ${PWD}/grafana-config/grafana-provisioning.yml:/etc/grafana/provisioning/datasources/grafana-provisioning.yml:ro
+      - ${PWD}/volume-grafana:/var/lib/grafana:rw
     networks:
       - grafana-network
     depends_on:
       loki:
+        condition: service_started
+      prometheus:
         condition: service_started
   treaefik:
     image: traefik:v3.5.2
