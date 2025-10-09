@@ -1,3 +1,10 @@
+### Used images
+```
+docker pull grafana/loki:3.5.5
+docker pull prom/prometheus:v3.6.0
+docker pull grafana/grafana:11.5
+docker pull traefik:v3.5.2
+```
 # Grafana logs preview
 
 ### Start service
