@@ -51,7 +51,7 @@ services:
     networks:
       - grafana-network
     ports:
-      - "7070:7070"
+      - "8088:7070"
     depends_on:
       grafana:
         condition: service_started
