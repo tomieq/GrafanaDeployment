@@ -10,3 +10,9 @@ scrape_configs:
 
     #static_configs:
       #- targets: ['prometheus-feeder:7074']
+  
+  - job_name: 'main-traefik'
+    scrape_interval: 10s
+
+    static_configs:
+      - targets: ['main-traefik:8080']

@@ -2,6 +2,8 @@ version: "3"
 networks:
   grafana-network:
     name: grafana-net
+  home-network:
+    name: home-network
 services:
   loki:
     image: grafana/loki:3.5.5
@@ -24,6 +26,7 @@ services:
       - ${PWD}/volume-prometheus:/prometheus:rw
     networks:
       - grafana-network
+      - home-network
   grafana:
     image: grafana/grafana:11.5
     container_name: grafana
@@ -38,9 +41,9 @@ services:
         condition: service_started
       prometheus:
         condition: service_started
-  treaefik:
+  grafana-traefik:
     image: traefik:v3.5.2
-    container_name: traefik-grafana
+    container_name: grafana-traefik
     volumes:
       - ${PWD}/traefik-config/traefik.yml:/etc/traefik/traefik.yml:ro
       - ${PWD}/traefik-config/traefik-routing.yml:/traefik-routing.yml:ro
