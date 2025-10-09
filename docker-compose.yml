@@ -40,7 +40,7 @@ services:
         condition: service_started
   treaefik:
     image: traefik:v3.5.2
-    container_name: traefik
+    container_name: traefik-grafana
     volumes:
       - ${PWD}/traefik-config/traefik.yml:/etc/traefik/traefik.yml:ro
       - ${PWD}/traefik-config/traefik-routing.yml:/traefik-routing.yml:ro
