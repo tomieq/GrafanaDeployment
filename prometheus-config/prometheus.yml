@@ -5,14 +5,14 @@ global:
 # Here it's Prometheus itself.
 scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-  #- job_name: 'frog1'
-    #scrape_interval: 10s
+  - job_name: 'chesskata-server'
+    scrape_interval: 60s
 
-    #static_configs:
-      #- targets: ['prometheus-feeder:7074']
+    static_configs:
+      - targets: ['chesskata-server:7071']
   
   - job_name: 'main-traefik'
-    scrape_interval: 10s
+    scrape_interval: 30s
 
     static_configs:
       - targets: ['main-traefik:8080']
