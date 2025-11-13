@@ -9,8 +9,6 @@ http:
     grafana:
       entryPoints:
         - web
-      middlewares:
-        - grafana-auth
       rule: PathPrefix(`/`)
       service: grafana
       priority: 1
