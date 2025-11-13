@@ -2,35 +2,40 @@ version: "3"
 networks:
   grafana-network:
     name: grafana-net
+volumes:
+  grafana-data:
+    name: "grafana-data"
+  loki-data:
+    name: "loki-data"
+  prometheus-data:
+    name: "prometheus-data"
+
 services:
   loki:
     image: grafana/loki:3.5.5
     container_name: loki
     command: -config.file=/etc/loki/local-config.yml
     restart: unless-stopped
-    user: "${UID}"
     volumes:
       - ${PWD}/loki-config/local-config.yml:/etc/loki/local-config.yml:ro
-      - ${PWD}/volume-loki:/loki:rw
+      - loki-data:/loki:rw
     networks:
       - grafana-network
   prometheus:
     image: prom/prometheus:v3.6.0
     container_name: prometheus
-    user: "${UID}"
     command: --config.file=/prometheus-config.yml
     volumes:
       - ${PWD}/prometheus-config/prometheus.yml:/prometheus-config.yml:ro
-      - ${PWD}/volume-prometheus:/prometheus:rw
+      - prometheus-data:/prometheus:rw
     networks:
       - grafana-network
   grafana:
     image: grafana/grafana:11.5
     container_name: grafana
-    user: "${UID}"
     volumes:
       - ${PWD}/grafana-config/grafana-provisioning.yml:/etc/grafana/provisioning/datasources/grafana-provisioning.yml:ro
-      - ${PWD}/volume-grafana:/var/lib/grafana:rw
+      - grafana-data:/var/lib/grafana:rw
     networks:
       - grafana-network
     depends_on:
