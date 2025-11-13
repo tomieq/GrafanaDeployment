@@ -47,3 +47,11 @@ sudo apt-get install apache2-utils
 htdigest traefik-config/digestUsers.txt grafana admin
 ```
 Default credentials in the config file is: admin:haslo
+
+## Volumes
+Images internally use volumes:
+```
+docker volume create grafana-data
+docker volume create loki-data
+docker volume create prometheus-data
+```
