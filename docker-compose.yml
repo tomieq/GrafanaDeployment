@@ -27,6 +27,7 @@ services:
     image: prom/prometheus:v3.6.0
     container_name: prometheus
     command: --config.file=/prometheus-config.yml
+    restart: unless-stopped
     volumes:
       - ./prometheus-config/prometheus.yml:/prometheus-config.yml:ro
       - prometheus-data:/prometheus:rw
@@ -36,6 +37,7 @@ services:
   grafana:
     image: grafana/grafana:11.5
     container_name: grafana
+    restart: unless-stopped
     volumes:
       - ./grafana-config/grafana-provisioning.yml:/etc/grafana/provisioning/datasources/grafana-provisioning.yml:ro
       - grafana-data:/var/lib/grafana:rw
@@ -49,6 +51,7 @@ services:
   grafana-traefik:
     image: traefik:v3.5.2
     container_name: grafana-traefik
+    restart: unless-stopped
     volumes:
       - ./traefik-config/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./traefik-config/traefik-routing.yml:/traefik-routing.yml:ro
