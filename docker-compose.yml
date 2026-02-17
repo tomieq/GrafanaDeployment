@@ -19,7 +19,7 @@ services:
     command: -config.file=/etc/loki/local-config.yml
     restart: unless-stopped
     volumes:
-      - ${PWD}/loki-config/local-config.yml:/etc/loki/local-config.yml:ro
+      - ./loki-config/local-config.yml:/etc/loki/local-config.yml:ro
       - loki-data:/loki:rw
     networks:
       - grafana-network
@@ -28,7 +28,7 @@ services:
     container_name: prometheus
     command: --config.file=/prometheus-config.yml
     volumes:
-      - ${PWD}/prometheus-config/prometheus.yml:/prometheus-config.yml:ro
+      - ./prometheus-config/prometheus.yml:/prometheus-config.yml:ro
       - prometheus-data:/prometheus:rw
     networks:
       - grafana-network
@@ -37,7 +37,7 @@ services:
     image: grafana/grafana:11.5
     container_name: grafana
     volumes:
-      - ${PWD}/grafana-config/grafana-provisioning.yml:/etc/grafana/provisioning/datasources/grafana-provisioning.yml:ro
+      - ./grafana-config/grafana-provisioning.yml:/etc/grafana/provisioning/datasources/grafana-provisioning.yml:ro
       - grafana-data:/var/lib/grafana:rw
     networks:
       - grafana-network
@@ -50,13 +50,10 @@ services:
     image: traefik:v3.5.2
     container_name: grafana-traefik
     volumes:
-      - ${PWD}/traefik-config/traefik.yml:/etc/traefik/traefik.yml:ro
-      - ${PWD}/traefik-config/traefik-routing.yml:/traefik-routing.yml:ro
-      - ${PWD}/traefik-config/digestUsers.txt:/digestUsers.txt:ro
+      - ./traefik-config/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik-config/traefik-routing.yml:/traefik-routing.yml:ro
+      - ./traefik-config/digestUsers.txt:/digestUsers.txt:ro
     networks:
       - grafana-network
     ports:
       - "8088:7070"
-    depends_on:
-      grafana:
-        condition: service_started
